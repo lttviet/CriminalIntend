@@ -5,7 +5,7 @@ import java.util.*
 
 object CrimeLab {
     private var crimeLab: CrimeLab? = null
-    private var crimes = arrayListOf<Crime>()
+    var crimes = arrayListOf<Crime>()
 
     private operator fun invoke(context: Context): CrimeLab {
         genCrimes()
