@@ -19,7 +19,7 @@ class CrimeListFragment: Fragment() {
     }
 
     private fun updateUI() {
-        val crimeLab: CrimeLab = CrimeLab.get(context!!)
-        crime_recycler_view.adapter = CrimeListAdapter(crimeLab.crimes, context!!)
+        val crimeLab: CrimeLab? = CrimeLab.get(context)
+        crime_recycler_view.adapter = CrimeListAdapter(crimeLab?.crimes)
     }
 }

@@ -1,29 +1,36 @@
 package com.lttviet.android.criminalintent
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import kotlinx.android.synthetic.main.list_item_crime.view.*
+import org.jetbrains.anko.toast
 
-class CrimeListAdapter(private val crimes: List<Crime>, private val context: Context): RecyclerView.Adapter<CrimeHolder>() {
+class CrimeListAdapter(var crimes: List<Crime>?): RecyclerView.Adapter<CrimeHolder>() {
     override fun getItemCount(): Int {
-        return crimes.size
+        return crimes?.size ?: 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
-        return CrimeHolder(LayoutInflater.from(context).inflate(R.layout.list_item_crime, parent, false))
+        val textView = LayoutInflater.from(parent.context)
+                .inflate(R.layout.list_item_crime, parent, false)
+        return CrimeHolder(textView)
     }
 
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
-        holder.crimeTitle.text = crimes[position].title
-        holder.crimeDate.text = crimes[position].date.toString()
+        crimes?.get(position)?.let { crime ->
+            holder.bind(crime)
+        }
     }
 }
 
-class CrimeHolder(view: View): RecyclerView.ViewHolder(view) {
-    val crimeTitle: TextView = view.crime_title
-    val crimeDate: TextView = view.crime_date
+class CrimeHolder(itemView: View): RecyclerView.ViewHolder(itemView)  {
+    fun bind(crime: Crime) {
+        itemView.crime_title.text = crime.title
+        itemView.crime_date.text = crime.date.toString()
+        itemView.setOnClickListener { _ ->
+            itemView.context.toast(crime.title + " clicked!")
+        }
+    }
 }

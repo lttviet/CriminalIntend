@@ -7,13 +7,13 @@ object CrimeLab {
     private var crimeLab: CrimeLab? = null
     var crimes = arrayListOf<Crime>()
 
-    private operator fun invoke(context: Context): CrimeLab {
+    private operator fun invoke(context: Context?): CrimeLab? {
         genCrimes()
         crimeLab = this
-        return crimeLab!!
+        return crimeLab
     }
 
-    fun get(context: Context): CrimeLab =
+    fun get(context: Context?): CrimeLab? =
         crimeLab ?: CrimeLab(context)
 
     private fun genCrimes() {
@@ -24,7 +24,6 @@ object CrimeLab {
             crimes.add(c)
         }
     }
-
 
     fun getCrime(id: UUID): Crime? =
             crimes.find { it.id == id }
