@@ -18,8 +18,20 @@ class CrimeListFragment: Fragment() {
         updateUI()
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateUI()
+    }
+
     private fun updateUI() {
         val crimeLab: CrimeLab? = CrimeLab.get(context)
-        crime_recycler_view.adapter = CrimeListAdapter(crimeLab?.crimes)
+
+        val itemClick: (Crime) -> Unit = { crime ->
+            val intent = CrimeActivity.newIntent(context, crime.id)
+            crime_recycler_view.adapter.notifyItemChanged(crimeLab?.getIndex(crime.id)!!)
+            startActivity(intent)
+        }
+
+        crime_recycler_view.adapter = CrimeListAdapter(crimeLab?.crimes, itemClick)
     }
 }

@@ -5,7 +5,8 @@ import java.util.*
 
 object CrimeLab {
     private var crimeLab: CrimeLab? = null
-    var crimes = arrayListOf<Crime>()
+    private var idCrimeMap = linkedMapOf<UUID, Crime>()
+    var crimes = listOf<Crime>()
 
     private operator fun invoke(context: Context?): CrimeLab? {
         genCrimes()
@@ -21,11 +22,11 @@ object CrimeLab {
             val c = Crime()
             c.title = String.format("Crime #%d", i)
             c.isSolved = (i % 2 == 0)
-            crimes.add(c)
+            idCrimeMap[c.id] = c
         }
+        crimes = idCrimeMap.values.toList()
     }
 
-    fun getCrime(id: UUID): Crime? =
-            crimes.find { it.id == id }
-
+    fun getCrime(id: UUID): Crime? = idCrimeMap[id]
+    fun getIndex(id: UUID): Int = idCrimeMap.keys.indexOf(id)
 }
