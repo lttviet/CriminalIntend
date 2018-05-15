@@ -27,7 +27,7 @@ class CrimeListFragment: Fragment() {
         val crimeLab: CrimeLab? = CrimeLab.get(context)
 
         val itemClick: (Crime) -> Unit = { crime ->
-            val intent = CrimeActivity.newIntent(context, crime.id)
+            val intent = CrimePagerActivity.newIntent(context, crime.id)
             crime_recycler_view.adapter.notifyItemChanged(crimeLab?.getIndex(crime.id)!!)
             startActivity(intent)
         }
