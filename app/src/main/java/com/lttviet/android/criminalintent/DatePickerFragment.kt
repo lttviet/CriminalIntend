@@ -9,10 +9,9 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.DatePicker
-import org.jetbrains.anko.AnkoLogger
 import java.util.*
 
-class DatePickerFragment: DialogFragment(), AnkoLogger {
+class DatePickerFragment: DialogFragment() {
     companion object {
         const val ARG_DATE = "date"
         const val EXTRA_DATE = "com.lttviet.android.criminalintent.date"
@@ -21,7 +20,7 @@ class DatePickerFragment: DialogFragment(), AnkoLogger {
             val args = Bundle()
             args.putSerializable(ARG_DATE, date)
 
-            val fragment: DatePickerFragment = DatePickerFragment()
+            val fragment = DatePickerFragment()
             fragment.arguments = args
             return fragment
         }
@@ -55,11 +54,11 @@ class DatePickerFragment: DialogFragment(), AnkoLogger {
         return AlertDialog.Builder(context!!)
                 .setView(v)
                 .setTitle(R.string.date_picker_title)
-                .setPositiveButton(android.R.string.ok, { dialog, which ->
-                    val date: Date = GregorianCalendar(datePicker.year,
+                .setPositiveButton(android.R.string.ok, { _, _ ->
+                    val d: Date = GregorianCalendar(datePicker.year,
                             datePicker.month,
                             datePicker.dayOfMonth).time
-                    sendResult(Activity.RESULT_OK, date)
+                    sendResult(Activity.RESULT_OK, d)
                 })
                 .create()
     }
