@@ -10,13 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_crime.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class CrimeFragment: Fragment() {
     companion object {
         const val ARG_CRIME_ID = "crime_id"
         const val DIALOG_DATE = "DialogDate"
+        const val DIALOG_TIME = "DialogTime"
         const val REQUEST_DATE = 0
+        const val REQUEST_TIME = 1
 
         fun newInstance(crimeID: UUID): CrimeFragment {
             val args = Bundle()
@@ -57,11 +60,17 @@ class CrimeFragment: Fragment() {
         })
 
         updateDate()
-
         crime_date.setOnClickListener {
-            val dialog = DatePickerFragment.newInstance(crime?.date!!)
+            val dialog = DatePickerFragment.newInstance(crime?.date?.time!!)
             dialog.setTargetFragment(this@CrimeFragment, REQUEST_DATE)
             dialog.show(fragmentManager, DIALOG_DATE)
+        }
+
+        updateTime()
+        crime_time.setOnClickListener {
+            val dialog = TimePickerFragment.newInstance(crime?.date!!)
+            dialog.setTargetFragment(this@CrimeFragment, REQUEST_TIME)
+            dialog.show(fragmentManager, DIALOG_TIME)
         }
 
         crime_solved.isChecked = crime?.isSolved!!
@@ -77,12 +86,22 @@ class CrimeFragment: Fragment() {
 
         if (requestCode == REQUEST_DATE) {
             val date: Date = data?.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
-            crime?.date = date
+            crime?.date?.time = date
             updateDate()
+        } else if (requestCode == REQUEST_TIME) {
+            val calendar: Calendar = data?.getSerializableExtra(TimePickerFragment.EXTRA_TIME) as Calendar
+            crime?.date = calendar
+            updateTime()
         }
     }
 
     private fun updateDate() {
-        crime_date.text = crime?.date.toString()
+        val formatter = SimpleDateFormat("yyyy-mm-dd")
+        crime_date.text = formatter.format(crime?.date?.time)
+    }
+
+    private fun updateTime() {
+        val formatter = SimpleDateFormat("HH:mm")
+        crime_time.text = formatter.format(crime?.date?.time)
     }
 }
