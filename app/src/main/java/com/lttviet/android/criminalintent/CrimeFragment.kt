@@ -1,5 +1,7 @@
 package com.lttviet.android.criminalintent
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
@@ -13,6 +15,8 @@ import java.util.*
 class CrimeFragment: Fragment() {
     companion object {
         const val ARG_CRIME_ID = "crime_id"
+        const val DIALOG_DATE = "DialogDate"
+        const val REQUEST_DATE = 0
 
         fun newInstance(crimeID: UUID): CrimeFragment {
             val args = Bundle()
@@ -52,12 +56,33 @@ class CrimeFragment: Fragment() {
             }
         })
 
-        crime_date.text = crime?.date.toString()
-        crime_date.isEnabled = false
+        updateDate()
+
+        crime_date.setOnClickListener {
+            val dialog = DatePickerFragment.newInstance(crime?.date!!)
+            dialog.setTargetFragment(this@CrimeFragment, REQUEST_DATE)
+            dialog.show(fragmentManager, DIALOG_DATE)
+        }
 
         crime_solved.isChecked = crime?.isSolved!!
         crime_solved.setOnCheckedChangeListener {
             _, isChecked ->  crime?.isSolved = isChecked
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+
+        if (requestCode == REQUEST_DATE) {
+            val date: Date = data?.getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
+            crime?.date = date
+            updateDate()
+        }
+    }
+
+    private fun updateDate() {
+        crime_date.text = crime?.date.toString()
     }
 }
